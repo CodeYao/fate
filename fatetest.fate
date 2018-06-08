@@ -1,0 +1,37 @@
+set owner []char
+set account<string> int32
+
+func init (pubkey []char) bool{
+    owner = pubkey
+    account<"Tom"> = 100
+    account<"Bob"> = 100
+    return true
+}
+
+func AddAccount(account_pay string, sig []char)bool{
+    if verfiy(sig, account_pay, owner) != true{
+        return false
+    }
+    account<account_pay> = 0
+    return true
+}
+func RemoveAccount(account_pay string, sig []char)bool{
+    if verify(sig, account_pay, owner) != true{
+        return false
+    }
+    remove(account<account_pay>)
+    return true
+}
+
+func Transfers(account_pay string, account_collect string, amount int32) bool{
+    if (account<account_pay> - amount >= 0){
+        account<account_pay> = account<account_pay> - amount
+        account<account_collect> = account<account_collect> + amount
+        return true
+    }
+    return false
+}
+
+func QueryAccount(accountName string){
+    return account<accountName>
+}
