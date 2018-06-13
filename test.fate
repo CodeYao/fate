@@ -1,44 +1,76 @@
-set a int8 = (1+2)*3
-#注释注释注释
-set aaaa float64 = 555.55555.77
-let aa [1][2][3][4]int8 = {{{{1,2,3,4},{5,6,7,8},{9,10,11,12}},{{1,2,3,4},{5,6,7,8},{9,10,11,12}}}}
-let bb [1][2][3][4]string = {{{{"aaa","aaa","aaa","aaa"},{"aa","aa","aa","aa"},{"aa","aa","aa","aa"}},{{"aa","aa","aa","aa"},{"aa","aa","aa","aa"},{"aa","aa","aa","aa"}}}}
-let cc [3][4]int8
-let dd [1   ][2][3][4]string
-set b int8 = 3 
-let c int8 = 9
-let d int8 = 8
+set owner []char;
+set account<string> int8;
 
-
-
-
-let e int8 = 8
-let f int8 = 8
-let g int8 = 8
-cc = {{111,111,111,111},{5,6,7,8},{9,10,11,12}}
-dd = {{{{"aaa","aaa","aaa","aaa"},{"aa","aa","aa","aa"},{"aa","aa","aa","aa"}},{{"aa","aa","aa","aa"},{"aa","aa","aa","aa"},{"aa","aa","aa","aa"}}}}
-aa[0][0][0] = cc[0]
-aa[0][0][0][0] = 100
-if(a==10&&a==9){
-    if(1==1){
-        a=10
-    }
-    a=a+1
-    a=6+a
-    a = 7
-}else if(1==1){
-    a=6
-}else{
-    a=5
-}
-for(d = 8;d<10;d=d+1){
-    for(e = 8;e<10;e=e+1){
-        for(f = 8;f<10;f=f+1){
-            for(g = 8;g<10;g=g+1){
-                let b int8 = 1
-                a=a+b
-            }
-        }
-    }
-}
-a=aa[0][0][0][0]+3
+func init(){
+	# define simple variable 
+	 let a bool;
+	 let b bool;
+	 a && b;
+	 let c int8;
+	 let d int16;
+	 set e int32;
+	 set f int64;
+	 let a1 uint8;
+	 let a2 uint16;
+	 let a3 uint32;
+	 let a4 uint64;
+	 let a5 bool;
+	 let f32 float32;
+	 let f64 float64;
+	 let str string;
+	 # define array 
+	 let array[] int8;
+	 let array[][] int8;
+	 array[0] = 100;
+ 
+	 str = "hello world";
+ 
+	 #define map
+	  set account<string> int64;
+ 
+	 let st1 int16;
+	 st1.a = 100*c;
+	 c = st1.a + st1.b;
+ 
+	 account["ab"] = 100;
+	 f32 = 123.12312;
+	 f64 = 12312321.1231231231231231231;
+ 
+	 if (f64 > f32){
+ 
+	 }else if(f32>10){
+ 
+	 }else{
+ 
+	 }
+	 let i int8;
+	 for(i=0;i<10;i++){
+		 
+	 }
+ 
+	 switch(i){
+		 case i<10:
+			 break;
+		 default:
+			 break;
+	 }
+	 i = f64 > f32?1:0;
+	 i--;
+	 ++i;
+	 --i;
+	 i+=10;
+	 i*=10;
+	 i/=10;
+	 i%=2;
+	 i=i>>1;
+	 i = i <<1;
+	i &= 128;
+	 #i |= 0x1;
+ 
+	 i = 10/0;
+	 i = 10%2;
+	 i = a + b - c;  
+	 i = i^1;
+	 i ^=1;
+	 a = !a;
+ }

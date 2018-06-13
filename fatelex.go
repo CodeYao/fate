@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"strconv"
 )
@@ -11,15 +12,26 @@ var fileLength int = 0
 var currentChar int = 0
 var tokenList []Token
 var fileByte []byte
+var currerntToken int = -1
 
-func main() {
-	fileByte = readFile2Byte("test.fate")
-	fileLength = len(fileByte)
-	Lex(fileByte)
-	//fmt.Println(string(fileByte))
+func (tk *Token) Lex(lval *yySymType) int {
+	currerntToken += 1
+	if currerntToken >= len(tokenList) {
+		return 0
+	}
+	if tokenList[currerntToken].tokenType == IDENTIFIER {
+		lval.sval = tokenList[currerntToken].tokenName
+	}
+	//fmt.Println(currerntToken, "************************chenyao", tokenList[currerntToken].tokenType, tokenList[currerntToken].tokenName)
+	//fmt.Println(currerntToken+1, "************************chenyao", tokenList[currerntToken+1].tokenType, tokenList[currerntToken+1].tokenName)
+	return tokenList[currerntToken].tokenType
 }
 
-func Lex(fileByte []byte) {
+func (tk *Token) Error(s string) {
+	log.Fatal(fmt.Errorf("Lex: %s", s))
+}
+
+func getLex(fileByte []byte) {
 	var token Token
 	for {
 		if currentChar >= fileLength {
@@ -49,6 +61,8 @@ func Lex(fileByte []byte) {
 		default:
 			token.tokenName = string(c)
 			fmt.Println("<DEFAULT>", token.tokenName, "\t", token.tokenName)
+			token.tokenType = int(c)
+			tokenList = append(tokenList, token)
 		}
 		//fmt.Println(string(c))
 	}
@@ -114,11 +128,14 @@ func getWotd(c_char byte) {
 			currentChar -= 1
 			var token Token
 			token.tokenName = string(tokenName[:])
-			if isKeyWord(token.tokenName) {
-				fmt.Println("'", token.tokenName, "'\t", token.tokenName)
+			if isKeyWord(&token) {
+				fmt.Println("'", token.tokenName, token.tokenType, "'\t", token.tokenName)
+				tokenList = append(tokenList, token)
 				break
 			} else {
 				fmt.Println("<IDENTIFIER>\t", token.tokenName)
+				token.tokenType = IDENTIFIER
+				tokenList = append(tokenList, token)
 				break
 			}
 		} else {
@@ -139,6 +156,8 @@ func ambigousSymbol(c_char byte) {
 		case '=':
 			token.tokenName += string(n_char)
 			fmt.Println("<LE_OP>\t", token.tokenName)
+			token.tokenType = LE_OP
+			tokenList = append(tokenList, token)
 			return
 		case '<':
 			token.tokenName += string(n_char)
@@ -147,10 +166,14 @@ func ambigousSymbol(c_char byte) {
 			if n2_char == '=' {
 				token.tokenName += string(n2_char)
 				fmt.Println("<LEFT_ASSIGN>\t", token.tokenName)
+				token.tokenType = LEFT_ASSIGN
+				tokenList = append(tokenList, token)
 				return
 			} else {
 				currentChar -= 1
 				fmt.Println("<LEFT_OP>\t", token.tokenName)
+				token.tokenType = LEFT_OP
+				tokenList = append(tokenList, token)
 				return
 			}
 		}
@@ -159,6 +182,8 @@ func ambigousSymbol(c_char byte) {
 		case '=':
 			token.tokenName += string(n_char)
 			fmt.Println("<GE_OP>\t", token.tokenName)
+			token.tokenType = GE_OP
+			tokenList = append(tokenList, token)
 			return
 		case '>':
 			token.tokenName += string(n_char)
@@ -167,10 +192,14 @@ func ambigousSymbol(c_char byte) {
 			if n2_char == '=' {
 				token.tokenName += string(n2_char)
 				fmt.Println("<RIGHT_ASSIGN>\t", token.tokenName)
+				token.tokenType = RIGHT_ASSIGN
+				tokenList = append(tokenList, token)
 				return
 			} else {
 				currentChar -= 1
 				fmt.Println("<RIGHT_OP>\t", token.tokenName)
+				token.tokenType = RIGHT_OP
+				tokenList = append(tokenList, token)
 				return
 			}
 		}
@@ -178,6 +207,8 @@ func ambigousSymbol(c_char byte) {
 		if n_char == '=' {
 			token.tokenName += string(n_char)
 			fmt.Println("<EQ_OP>\t", token.tokenName)
+			token.tokenType = EQ_OP
+			tokenList = append(tokenList, token)
 			return
 		}
 	case '+':
@@ -185,10 +216,14 @@ func ambigousSymbol(c_char byte) {
 		case '+':
 			token.tokenName += string(n_char)
 			fmt.Println("<INC_OP>\t", token.tokenName)
+			token.tokenType = INC_OP
+			tokenList = append(tokenList, token)
 			return
 		case '=':
 			token.tokenName += string(n_char)
 			fmt.Println("<ADD_ASSIGN>\t", token.tokenName)
+			token.tokenType = ADD_ASSIGN
+			tokenList = append(tokenList, token)
 			return
 		}
 	case '-':
@@ -196,40 +231,54 @@ func ambigousSymbol(c_char byte) {
 		case '-':
 			token.tokenName += string(n_char)
 			fmt.Println("<DEC_OP>\t", token.tokenName)
+			token.tokenType = DEC_OP
+			tokenList = append(tokenList, token)
 			return
 		case '=':
 			token.tokenName += string(n_char)
 			fmt.Println("<SUB_ASSIGN>\t", token.tokenName)
+			token.tokenType = SUB_ASSIGN
+			tokenList = append(tokenList, token)
 			return
 		}
 	case '*':
 		if n_char == '=' {
 			token.tokenName += string(n_char)
 			fmt.Println("<MUL_ASSIGN>\t", token.tokenName)
+			token.tokenType = MUL_ASSIGN
+			tokenList = append(tokenList, token)
 			return
 		}
 	case '/':
 		if n_char == '=' {
 			token.tokenName += string(n_char)
 			fmt.Println("<DIV_ASSIGN>\t", token.tokenName)
+			token.tokenType = DIV_ASSIGN
+			tokenList = append(tokenList, token)
 			return
 		}
 	case '%':
 		if n_char == '=' {
 			token.tokenName += string(n_char)
 			fmt.Println("<MOD_ASSIGN>\t", token.tokenName)
+			token.tokenType = MOD_ASSIGN
+			tokenList = append(tokenList, token)
 			return
 		}
 	case '^':
 		if n_char == '=' {
 			token.tokenName += string(n_char)
 			fmt.Println("<XOR_ASSIGN>\t", token.tokenName)
+			token.tokenType = XOR_ASSIGN
+			tokenList = append(tokenList, token)
 			return
 		}
 	case '!':
 		if n_char == '=' {
 			token.tokenName += string(n_char)
 			fmt.Println("<NE_OP>\t", token.tokenName)
+			token.tokenType = NE_OP
+			tokenList = append(tokenList, token)
 			return
 		}
 	case '&':
@@ -237,10 +286,14 @@ func ambigousSymbol(c_char byte) {
 		case '&':
 			token.tokenName += string(n_char)
 			fmt.Println("<AND_OP>\t", token.tokenName)
+			token.tokenType = AND_OP
+			tokenList = append(tokenList, token)
 			return
 		case '=':
 			token.tokenName += string(n_char)
 			fmt.Println("<AND_ASSIGN>\t", token.tokenName)
+			token.tokenType = AND_ASSIGN
+			tokenList = append(tokenList, token)
 			return
 		}
 	case '|':
@@ -248,33 +301,40 @@ func ambigousSymbol(c_char byte) {
 		case '|':
 			token.tokenName += string(n_char)
 			fmt.Println("<OR_OP>\t", token.tokenName)
+			token.tokenType = OR_OP
+			tokenList = append(tokenList, token)
 			return
 		case '=':
 			token.tokenName += string(n_char)
 			fmt.Println("<OR_ASSIGN>\t", token.tokenName)
+			token.tokenType = OR_ASSIGN
+			tokenList = append(tokenList, token)
 			return
 		}
 	}
 	currentChar -= 1
 	fmt.Println("<SIGLE_OP>", token.tokenName, "\t", token.tokenName)
+	token.tokenType = int(c_char)
+	tokenList = append(tokenList, token)
 }
 
 //获取数字
 func getNumber(c_char byte) {
 	var token Token
-	typ := 0
+	token.tokenType = INT_CONSTANT
 	token.tokenName += string(c_char)
 	for {
 		n_char := fileByte[currentChar]
 		currentChar += 1
-		if n_char == '.' && typ == 0 {
+		if n_char == '.' && token.tokenType == INT_CONSTANT {
 			token.tokenName += string(n_char)
-			typ = 1
+			token.tokenType = FLOAT_CONSTANT
 		} else if isDigit(int(n_char)) {
 			token.tokenName += string(n_char)
 		} else {
 			currentChar -= 1
 			fmt.Println("<NUMBER>", token.tokenName, "\t", token.tokenName)
+			tokenList = append(tokenList, token)
 			break
 		}
 	}
@@ -302,9 +362,13 @@ func getLiteral(c_char byte) {
 			//fmt.Println("****************", string(c_char))
 			if c_char == '\'' {
 				fmt.Println("<CHAR>", token.tokenName, "\t", token.tokenName)
+				token.tokenType = CHAR_CONSTANT
+				tokenList = append(tokenList, token)
 				return
 			} else if c_char == '"' {
 				fmt.Println("<STRING>", token.tokenName, "\t", token.tokenName)
+				token.tokenType = STRING_CONSTANT
+				tokenList = append(tokenList, token)
 				return
 			}
 		default:
@@ -314,9 +378,10 @@ func getLiteral(c_char byte) {
 }
 
 //判断是否关键字
-func isKeyWord(tokenName string) bool {
+func isKeyWord(token *Token) bool {
 	for _, v := range KeyWords {
-		if tokenName == v {
+		if token.tokenName == v.KeyWordsName {
+			token.tokenType = v.KeyWordsType
 			return true
 		}
 	}

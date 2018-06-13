@@ -30,6 +30,8 @@ package main
 
 %token LET SET FUNC TYPE CASE DEFAULT IF ELSE SWITCH FOR GOTO CONTINUE BREAK RETURN
 
+%type <sval> compound_statement
+
 %start translation_unit
 
 %%
@@ -60,6 +62,7 @@ translation_unit
 external_declaration
 	: declaration
     | function_definition
+	| variable_definition
     ;
 
 declaration
@@ -71,13 +74,16 @@ type_declaration
 	| struct_declaration
     ;
 
-function_declaration
+/*function_declaration
     : EXTERN FUNC IDENTIFIER '(' parameter_list ')' ';'
     | EXTERN FUNC IDENTIFIER '(' parameter_list ')' type_specifier ';'
-    ;
+    ;*/
 
 function_definition
     : FUNC IDENTIFIER '(' parameter_list ')' compound_statement
+	{
+		createFuntion($2,$6)
+	}
     | FUNC IDENTIFIER '(' parameter_list ')' type_specifier compound_statement
     ;
 
@@ -103,7 +109,13 @@ statement
 
 compound_statement
 	: '{' '}'
+	{
+		$$="hahahahahaha"
+	}
 	| '{' block_item_list '}'
+	{
+		$$="hahahahahaha"
+	}
 	;
 
 block_item_list
@@ -275,7 +287,7 @@ assignment_operator
 	;
 
 struct_declaration
-    : TYPE IDENTIFIER STRUCT '{' struct_declaration_list '}' ';' {ft.newWord(TYPE_STRUCT, $2)}
+    : TYPE IDENTIFIER STRUCT '{' struct_declaration_list '}' ';' /*{ft.newWord(TYPE_STRUCT, $2)}*/
     ;
 
 struct_declaration_list
@@ -285,7 +297,7 @@ struct_declaration_list
 
 const_declaration /* 枚举类型 */
     : CONST '(' consterator_list ')'
-    | CONST IDENTIFIER '(' consterator_list ')' {ft.newWord(TYPE_CONST, $2)}
+    | CONST IDENTIFIER '(' consterator_list ')' /*{ft.newWord(TYPE_CONST, $2)}*/
     ;
 
 consterator_list

@@ -44,9 +44,14 @@ type TokenType int
 
 // )
 
-var KeyWords = []string{"int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64", "bool", "float32", "float64", "string", "char", "if", "else", "for", "break", "return", "let", "set", "func", "false", "true"}
+type KeyWordsToken struct {
+	KeyWordsName string
+	KeyWordsType int
+}
+
+var KeyWords = []KeyWordsToken{{"int8", INT8}, {"int16", INT16}, {"int32", INT32}, {"int64", INT64}, {"uint8", UINT8}, {"uint16", UINT16}, {"uint32", UINT32}, {"uint64", UINT64}, {"bool", BOOL}, {"float32", FLOAT32}, {"float64", FLOAT64}, {"string", STRING}, {"char", CHAR}, {"if", IF}, {"else", ELSE}, {"for", FOR}, {"switch", SWITCH}, {"case", CASE}, {"break", BREAK}, {"return", RETURN}, {"let", LET}, {"set", SET}, {"func", FUNC}, {"false", BOOL_CONSTANT}, {"true", BOOL_CONSTANT}}
 
 type Token struct {
 	tokenName string
-	tokenType TokenType
+	tokenType int
 }
