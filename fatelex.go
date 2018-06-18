@@ -19,7 +19,20 @@ func (tk *Token) Lex(lval *yySymType) int {
 	if currerntToken >= len(tokenList) {
 		return 0
 	}
-	if tokenList[currerntToken].tokenType == IDENTIFIER {
+	switch tokenList[currerntToken].tokenType {
+	case IDENTIFIER:
+		lval.sval = tokenList[currerntToken].tokenName
+	case INT_CONSTANT:
+		lval.ival, _ = strconv.ParseUint((tokenList[currerntToken].tokenName), 0, 64)
+	case BOOL_CONSTANT:
+		if tokenList[currerntToken].tokenName == "true" {
+			lval.bval = true
+		} else if tokenList[currerntToken].tokenName == "false" {
+			lval.bval = false
+		}
+	case FLOAT_CONSTANT:
+		lval.fval, _ = strconv.ParseFloat(tokenList[currerntToken].tokenName, 64)
+	case STRING_CONSTANT:
 		lval.sval = tokenList[currerntToken].tokenName
 	}
 	//fmt.Println(currerntToken, "************************chenyao", tokenList[currerntToken].tokenType, tokenList[currerntToken].tokenName)

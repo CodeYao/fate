@@ -1,6 +1,7 @@
 package main
 
-type TokenType int
+//type TokenType int
+type BasicType int
 
 // const (
 // 	NULL                TokenType = iota //空字符
@@ -43,6 +44,24 @@ type TokenType int
 // 	LOGICAL_OR_TOKEN                     // ||
 
 // )
+
+const (
+	INT8_T BasicType = iota
+	INT16_T
+	INT32_T
+	INT64_T
+	UINT8_T
+	UINT16_T
+	UINT32_T
+	UINT64_T
+	FLOAT32_T
+	FLOAT64_T
+	BOOL_T
+	STRING_T
+	CHAR_T
+	NULL_T
+	ERRORTYPE_T
+)
 
 type KeyWordsToken struct {
 	KeyWordsName string

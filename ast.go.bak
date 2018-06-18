@@ -1,0 +1,56 @@
+package main
+
+//抽象语法树的根节点
+type AST struct {
+	exproNode      ExproNode      //表示表达式的节点
+	solt           Solt           //表示结构体的节点
+	stmtNode       StmtNode       //表示语句块的节点
+	typeDefinition TypeDefinition //类型定义
+	typeNode       TypeNode       //存储类型的节点
+}
+
+//表达书语句节点
+type ExproNode struct {
+	abstractAssignNode AbstractAssignNode //赋值
+	addressNode        AddressNode        //地址表达式
+	binaryOpNode       BinaryOpNode       //二元运算表达式 x+y...
+	castNode           CastNode           //类型转换
+	condExprNode       CondExprNode       //条件表达式(a?b:c)
+	funcCallNode       FuncCallNode       //函数调用表达式
+	lhNode             LHSNode            //能够成为赋值的左值节点
+	literalNode        LiteralNode        //字面量
+	sizeofExprNode     SizeofExprNode     //计算表达式的sizeof的表达式
+	sizeofTYpeNode     SizeofTypeNode     //计算类型的sizeof的表达式
+	unaryOpNode        UnaryOpNode        //一元运算表达式
+}
+
+//表示结构体成员的节点
+type Solt struct {
+}
+
+//表示语句块的节点
+type StmtNode struct {
+	block        BlockNode    //程序快{...}
+	breakNode    BreakNode    //break标签
+	caseNode     CaseNode     //case标签
+	continueNode ContinueNode //continue标签
+	doWhileNode  DoWhileNode  //dowhile标签
+	exprStmtNode ExprStmtNode //单独构成语句的表达式
+	forNode      ForNode      //for语句
+	gotoNode     GotoNode     //goto语句
+	ifNode       IfNode       //if语句
+	labelNode    LabelNode    //goto 标签
+	returnNode   ReturnNode   //return标签
+	switchNode   SwichNode    //switch语句
+	whileNode    WhileNode    //while语句
+}
+
+//类型定义
+type TypeDefinition struct {
+	compositeTypeDefinition CompositeTypeDefinition //结构体定义
+	typedefNode             TypedefNode             //typedef声明
+}
+
+//存储类型节点
+type TypeNode struct {
+}
