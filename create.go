@@ -4,7 +4,11 @@ import (
 	"fmt"
 )
 
-func createFuntion(a string, b string) {
+func findIdentifierLiteralNode(lval LiteralNode) {
 
-	fmt.Println("chenyao**************function Name is ", a, b)
+	fmt.Println("chenyao**************IdentifierLiteralNode is ", lval.identifierLiteralNode.value)
+}
+
+func aa() ExprNode {
+	return ExprNode{}
 }

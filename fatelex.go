@@ -15,25 +15,64 @@ var fileByte []byte
 var currerntToken int = -1
 
 func (tk *Token) Lex(lval *yySymType) int {
+	if lval.exprNode.literalNode == nil {
+		lval.exprNode.literalNode = &LiteralNode{}
+	}
 	currerntToken += 1
 	if currerntToken >= len(tokenList) {
+		fmt.Println("chenyao*************")
 		return 0
 	}
 	switch tokenList[currerntToken].tokenType {
 	case IDENTIFIER:
-		lval.sval = tokenList[currerntToken].tokenName
-	case INT_CONSTANT:
-		lval.ival, _ = strconv.ParseUint((tokenList[currerntToken].tokenName), 0, 64)
-	case BOOL_CONSTANT:
-		if tokenList[currerntToken].tokenName == "true" {
-			lval.bval = true
-		} else if tokenList[currerntToken].tokenName == "false" {
-			lval.bval = false
+		if lval.exprNode.literalNode.identifierLiteralNode == nil {
+			lval.exprNode.literalNode.identifierLiteralNode = &IdentifierLiteralNode{}
 		}
-	case FLOAT_CONSTANT:
-		lval.fval, _ = strconv.ParseFloat(tokenList[currerntToken].tokenName, 64)
-	case STRING_CONSTANT:
-		lval.sval = tokenList[currerntToken].tokenName
+		lval.exprNode.literalNode.identifierLiteralNode.value = tokenList[currerntToken].tokenName
+		lval.exprNode.literalNode.identifierLiteralNode.typeNode.types = IDENTIFIER
+		lval.exprNode.literalNode.identifierLiteralNode.location.token = tokenList[currerntToken]
+		//fmt.Println("chenyao*************", tokenList[currerntToken])
+	case INT_LITERAL:
+		if lval.exprNode.literalNode.integerLiteralNode == nil {
+			lval.exprNode.literalNode.integerLiteralNode = &IntegerLiteralNode{}
+		}
+		lval.exprNode.literalNode.integerLiteralNode.value, _ = strconv.ParseUint((tokenList[currerntToken].tokenName), 0, 64)
+		lval.exprNode.literalNode.integerLiteralNode.typeNode.types = INT_LITERAL
+		lval.exprNode.literalNode.identifierLiteralNode.location.token = tokenList[currerntToken]
+
+	case BOOL_LITERAL:
+		if lval.exprNode.literalNode.boolLiteralNode == nil {
+			lval.exprNode.literalNode.boolLiteralNode = &BoolLiteralNode{}
+		}
+		if tokenList[currerntToken].tokenName == "true" {
+			lval.exprNode.literalNode.boolLiteralNode.value = true
+		} else if tokenList[currerntToken].tokenName == "false" {
+			lval.exprNode.literalNode.boolLiteralNode.value = false
+		}
+		lval.exprNode.literalNode.boolLiteralNode.typeNode.types = BOOL_LITERAL
+		lval.exprNode.literalNode.boolLiteralNode.location.token = tokenList[currerntToken]
+	case FLOAT_LITERAL:
+		if lval.exprNode.literalNode.floatLiteralNode == nil {
+			lval.exprNode.literalNode.floatLiteralNode = &FloatLiteralNode{}
+		}
+		lval.exprNode.literalNode.floatLiteralNode.value, _ = strconv.ParseFloat(tokenList[currerntToken].tokenName, 64)
+		lval.exprNode.literalNode.floatLiteralNode.typeNode.types = FLOAT_LITERAL
+		lval.exprNode.literalNode.floatLiteralNode.location.token = tokenList[currerntToken]
+	case STRING_LITERAL:
+		if lval.exprNode.literalNode.stringLiteralNode == nil {
+			lval.exprNode.literalNode.stringLiteralNode = &StringLiteralNode{}
+		}
+		lval.exprNode.literalNode.stringLiteralNode.value = tokenList[currerntToken].tokenName
+		lval.exprNode.literalNode.stringLiteralNode.typeNode.types = STRING_LITERAL
+		lval.exprNode.literalNode.stringLiteralNode.location.token = tokenList[currerntToken]
+	case CHAR_LITERAL:
+		if lval.exprNode.literalNode.charLiteralNode == nil {
+			lval.exprNode.literalNode.charLiteralNode = &CharLiteralNode{}
+		}
+		lval.exprNode.literalNode.charLiteralNode.value = []byte(tokenList[currerntToken].tokenName)[0]
+		lval.exprNode.literalNode.charLiteralNode.typeNode.types = CHAR_LITERAL
+		lval.exprNode.literalNode.charLiteralNode.location.token = tokenList[currerntToken]
+
 	}
 	//fmt.Println(currerntToken, "************************chenyao", tokenList[currerntToken].tokenType, tokenList[currerntToken].tokenName)
 	//fmt.Println(currerntToken+1, "************************chenyao", tokenList[currerntToken+1].tokenType, tokenList[currerntToken+1].tokenName)
@@ -334,14 +373,14 @@ func ambigousSymbol(c_char byte) {
 //获取数字
 func getNumber(c_char byte) {
 	var token Token
-	token.tokenType = INT_CONSTANT
+	token.tokenType = INT_LITERAL
 	token.tokenName += string(c_char)
 	for {
 		n_char := fileByte[currentChar]
 		currentChar += 1
-		if n_char == '.' && token.tokenType == INT_CONSTANT {
+		if n_char == '.' && token.tokenType == INT_LITERAL {
 			token.tokenName += string(n_char)
-			token.tokenType = FLOAT_CONSTANT
+			token.tokenType = FLOAT_LITERAL
 		} else if isDigit(int(n_char)) {
 			token.tokenName += string(n_char)
 		} else {
@@ -375,12 +414,12 @@ func getLiteral(c_char byte) {
 			//fmt.Println("****************", string(c_char))
 			if c_char == '\'' {
 				fmt.Println("<CHAR>", token.tokenName, "\t", token.tokenName)
-				token.tokenType = CHAR_CONSTANT
+				token.tokenType = CHAR_LITERAL
 				tokenList = append(tokenList, token)
 				return
 			} else if c_char == '"' {
 				fmt.Println("<STRING>", token.tokenName, "\t", token.tokenName)
-				token.tokenType = STRING_CONSTANT
+				token.tokenType = STRING_LITERAL
 				tokenList = append(tokenList, token)
 				return
 			}

@@ -3,19 +3,15 @@ package main
 %}
 
 %union{
-    bval bool
-    cval byte
-    ival uint64
-    sval string
-    fval float64
+    exprNode ExprNode
 }
 
-%token <sval> IDENTIFIER
-%token <ival> INT_CONSTANT
-%token <cval> CHAR_CONSTANT
-%token <bval> BOOL_CONSTANT
-%token <fval> FLOAT_CONSTANT
-%token <sval> STRING_CONSTANT
+%token <exprNode>     INT_LITERAL
+%token <exprNode>     FLOAT_LITERAL
+%token <exprNode>     STRING_LITERAL
+%token <exprNode>     CHAR_LITERAL
+%token <exprNode>     BOOL_LITERAL
+%token <exprNode>     IDENTIFIER
 
 %token INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
 %token AND_OP OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
@@ -29,6 +25,10 @@ package main
 %token STRUCT CONST EXTERN
 
 %token LET SET FUNC TYPE CASE DEFAULT IF ELSE SWITCH FOR GOTO CONTINUE BREAK RETURN
+
+%type <exprNode> primary_expression expression assignment_expression expression_statement constant_expression conditional_expression 
+	  logical_or_expression logical_and_expression inclusive_or_expression exclusive_or_expression and_expression equality_expression
+	  relational_expression shift_expression additive_expression cast_expression multiplicative_expression unary_expression postfix_expression
 
 %start translation_unit
 
@@ -60,6 +60,7 @@ translation_unit
 external_declaration
 	: declaration
     | function_definition
+	| variable_definition
     ;
 
 declaration
@@ -125,7 +126,13 @@ labeled_statement
 
 expression_statement
 	: ';'
+	{
+		$$= aa()
+	}
 	| expression ';'
+	{
+		$$=$1
+	}
 	;
 
 selection_statement
@@ -227,8 +234,17 @@ unary_operator
 unary_expression
 	: postfix_expression
 	| INC_OP unary_expression
+	{
+		$$=aa()
+	}
 	| DEC_OP unary_expression
+	{
+		$$=aa()
+	}
 	| unary_operator cast_expression
+	{
+		$$=aa()
+	}
 	;
 
 postfix_expression
@@ -242,12 +258,15 @@ postfix_expression
 
 primary_expression
 	: IDENTIFIER
-	| INT_CONSTANT      /* 整形常量 */
-    | BOOL_CONSTANT     /* bool常量 */
-    | CHAR_CONSTANT     /* char常量 */
-    | FLOAT_CONSTANT    /* 浮点常量 */
-	| STRING_CONSTANT    /* 字符串常量 */
+	| INT_LITERAL      /* 整形常量 */
+    | BOOL_LITERAL     /* bool常量 */
+    | CHAR_LITERAL     /* char常量 */
+    | FLOAT_LITERAL    /* 浮点常量 */
+	| STRING_LITERAL    /* 字符串常量 */
 	| '(' expression ')'
+	{
+		$$=$2
+	}
 	;
 
 expression
@@ -275,7 +294,7 @@ assignment_operator
 	;
 
 struct_declaration
-    : TYPE IDENTIFIER STRUCT '{' struct_declaration_list '}' ';' {ft.newWord(TYPE_STRUCT, $2)}
+    : TYPE IDENTIFIER STRUCT '{' struct_declaration_list '}' ';' /*{ft.newWord(TYPE_STRUCT, $2)}*/
     ;
 
 struct_declaration_list
@@ -285,7 +304,7 @@ struct_declaration_list
 
 const_declaration /* 枚举类型 */
     : CONST '(' consterator_list ')'
-    | CONST IDENTIFIER '(' consterator_list ')' {ft.newWord(TYPE_CONST, $2)}
+    | CONST IDENTIFIER '(' consterator_list ')' /*{ft.newWord(TYPE_CONST, $2)}*/
     ;
 
 consterator_list
