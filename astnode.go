@@ -201,13 +201,13 @@ type OpAssignNode struct {
 type AddressNode struct {
 	expr ExprNode
 	//可能有问题
-	types BasicType
+	types int //BasicType
 }
 type BinaryOpNode struct {
 	operator string
 	left     ExprNode
 	right    ExprNode
-	types    BasicType
+	types    int //BasicType
 }
 type CastNode struct {
 	typeNode TypeNode
@@ -231,8 +231,8 @@ type Slot struct {
 
 //类型节点，可能会有问题
 type TypeNode struct {
-	typeRef BasicType
-	types   BasicType
+	typeRef int //BasicType
+	types   int //BasicType
 }
 type TypedefNode struct {
 	real           TypeNode
@@ -254,14 +254,24 @@ type FuncCallNode struct {
 	args []ExprNode
 }
 type LHSNode struct {
-	types        BasicType
-	variableNode VariableNode
+	//types        int //BasicType
+	variableNode *VariableNode
+	arefNode     *ArefNode
+	memberNode   *MemberNode
 	//暂时不处理
 }
 type VariableNode struct {
 	location Location
 	name     string
 	entity   Entity
+}
+type ArefNode struct {
+	expr  ExprNode
+	index ExprNode
+}
+type MemberNode struct {
+	member string
+	expr   ExprNode
 }
 type LiteralNode struct {
 	integerLiteralNode    *IntegerLiteralNode
@@ -325,11 +335,12 @@ type SizeofTypeNode struct {
 type UnaryOpNode struct {
 	amount   int64
 	operator string
+	isPer    bool
 	expr     ExprNode
-	opType   BasicType
+	opType   int
 }
 type Expr struct {
-	types BasicType
+	types int //BasicType
 	//中间代码阶段，暂未设计，可能有问题
 }
 type Symbol struct {

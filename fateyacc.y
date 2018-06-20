@@ -4,6 +4,10 @@ package main
 
 %union{
     exprNode ExprNode
+	exprNode_list []ExprNode
+	unary_operator byte
+	assignment_operator string
+	stmtNode StmtNode
 }
 
 %token <exprNode>     INT_LITERAL
@@ -26,10 +30,13 @@ package main
 
 %token LET SET FUNC TYPE CASE DEFAULT IF ELSE SWITCH FOR GOTO CONTINUE BREAK RETURN
 
-%type <exprNode> primary_expression expression assignment_expression expression_statement constant_expression conditional_expression 
+%type <exprNode> primary_expression expression assignment_expression constant_expression conditional_expression 
 	  logical_or_expression logical_and_expression inclusive_or_expression exclusive_or_expression and_expression equality_expression
 	  relational_expression shift_expression additive_expression cast_expression multiplicative_expression unary_expression postfix_expression
-
+%type <unary_operator> unary_operator
+%type <exprNode_list> argument_expression_list
+%type <assignment_operator> assignment_operator
+%type <stmtNode> statement labeled_statement compound_statement expression_statement selection_statement iteration_statement jump_statement
 %start translation_unit
 
 %%
@@ -104,7 +111,13 @@ statement
 
 compound_statement
 	: '{' '}'
+	{
+		$$ = aa()
+	}
 	| '{' block_item_list '}'
+	{
+		$$ = aa()
+	}
 	;
 
 block_item_list
@@ -120,38 +133,77 @@ block_item
 
 labeled_statement
 	: IDENTIFIER ':' statement
+	{
+		$$ = aa()
+	}
 	| CASE constant_expression ':' statement
+	{
+		$$ = aa()
+	}
 	| DEFAULT ':' statement
+	{
+		$$ = aa()
+	}
 	;
 
 expression_statement
 	: ';'
 	{
-		$$= aa()
+		$$ = StmtNode{}
 	}
 	| expression ';'
 	{
-		$$=$1
+		$$ = createExprStmtNode($1)
 	}
 	;
 
 selection_statement
 	: IF '(' expression ')' statement
+	{
+		$$ = createIfNode($3,$5,(StmtNode{}))
+	}
 	| IF '(' expression ')' statement ELSE statement
+	{
+		$$ = createIfNode($3,$5,$7)
+	}
 	| SWITCH '(' expression ')' statement
+	{
+		$$ = aa()
+	}
 	;
 
 iteration_statement
 	: FOR '(' expression_statement expression_statement ')' statement
+	{
+		$$ = createForNode($3,$4,(ExprNode{}),$6)
+	}
 	| FOR '(' expression_statement expression_statement expression ')' statement
+	{
+		$$ = createForNode($3,$4,$5,$7)
+	}
 	;
 
 jump_statement
 	: GOTO IDENTIFIER ';'
+	{
+		$$ = aa()
+	}
 	| CONTINUE ';'
+	{
+		$$ = aa()
+	}
 	| BREAK ';'
+	{
+		$$ = aa()
+	}
 	| RETURN ';'
+	{
+		$$ = aa()
+	}
 	| RETURN expression ';'
+	{
+		$$ = aa()
+	}
 	;
 
 constant_expression
@@ -161,64 +213,121 @@ constant_expression
 conditional_expression
 	: logical_or_expression
 	| logical_or_expression '?' expression ':' conditional_expression
+	{
+		$$ = createCondExprNode($1,$3,$5)
+	}
 	;
 
 logical_or_expression
 	: logical_and_expression
 	| logical_or_expression OR_OP logical_and_expression
+	{
+		$$ = ceateBinaryOpNode($1,"||",$3)
+	}
 	;
 
 logical_and_expression
 	: inclusive_or_expression
 	| logical_and_expression AND_OP inclusive_or_expression
+	{
+		$$ = ceateBinaryOpNode($1,"&&",$3)
+	}
 	;
 
 inclusive_or_expression
 	: exclusive_or_expression
 	| inclusive_or_expression '|' exclusive_or_expression
+	{
+		$$ = ceateBinaryOpNode($1,"|",$3)
+	}
 	;
 
 exclusive_or_expression
 	: and_expression
 	| exclusive_or_expression '^' and_expression
+	{
+		$$ = ceateBinaryOpNode($1,"^",$3)
+	}
 	;
 
 and_expression
 	: equality_expression
 	| and_expression '&' equality_expression
+	{
+		$$ = ceateBinaryOpNode($1,"&",$3)
+	}
 	;
 
 equality_expression
 	: relational_expression
 	| equality_expression EQ_OP relational_expression
+	{
+		$$ = ceateBinaryOpNode($1,"==",$3)
+	}
 	| equality_expression NE_OP relational_expression
+	{
+		$$ = ceateBinaryOpNode($1,"!=",$3)
+	}
 	;
 
 relational_expression
 	: shift_expression
 	| relational_expression '<' shift_expression
+	{
+		$$ = ceateBinaryOpNode($1,"<",$3)
+	}
 	| relational_expression '>' shift_expression
+	{
+		$$ = ceateBinaryOpNode($1,">",$3)
+	}
 	| relational_expression LE_OP shift_expression
+	{
+		$$ = ceateBinaryOpNode($1,"<=",$3)
+	}
 	| relational_expression GE_OP shift_expression
+	{
+		$$ = ceateBinaryOpNode($1,">=",$3)
+	}
 	;
 
 shift_expression
 	: additive_expression
 	| shift_expression LEFT_OP additive_expression
+	{
+		$$ = ceateBinaryOpNode($1,"<<",$3)
+	}
 	| shift_expression RIGHT_OP additive_expression
+	{
+		$$ = ceateBinaryOpNode($1,">>",$3)
+	}
 	;
 
 additive_expression
 	: multiplicative_expression
 	| additive_expression '+' multiplicative_expression
+	{
+		$$ = ceateBinaryOpNode($1,"+",$3)
+	}
 	| additive_expression '-' multiplicative_expression
+	{
+		$$ = ceateBinaryOpNode($1,"-",$3)
+	}
 	;
 
 multiplicative_expression
 	: cast_expression
 	| multiplicative_expression '*' cast_expression
+	{
+		$$ = ceateBinaryOpNode($1,"*",$3)
+	}
 	| multiplicative_expression '/' cast_expression
+	{
+		$$ = ceateBinaryOpNode($1,"/",$3)
+	}
 	| multiplicative_expression '%' cast_expression
+	{
+		$$ = ceateBinaryOpNode($1,"%",$3)
+	}
 	;
 
 cast_expression
@@ -227,33 +336,57 @@ cast_expression
 
 unary_operator
 	: '+'
+	{
+		$$='+'
+	}
 	| '-'
+	{
+		$$='-'
+	}
 	| '!'
+	{
+		$$='!'
+	}
 	;
 
 unary_expression
 	: postfix_expression
 	| INC_OP unary_expression
 	{
-		$$=aa()
+		$$=createPrefixOpNode(INC_OP,$2)
 	}
 	| DEC_OP unary_expression
 	{
-		$$=aa()
+		$$=createPrefixOpNode(DEC_OP,$2)
 	}
 	| unary_operator cast_expression
 	{
-		$$=aa()
+		$$=createUnaryOpNode($1,$2)
 	}
 	;
 
 postfix_expression
 	: primary_expression
 	| postfix_expression '[' expression ']'
+	{
+		$$=createArefNode($1,$3)
+	}
     | postfix_expression '(' argument_expression_list ')'
+	{
+		$$=createFuncallNode($1,$3)
+	}
 	| postfix_expression '.' IDENTIFIER
+	{
+		$$=createMemberNode($1,$3)
+	}
 	| postfix_expression INC_OP
+	{
+		$$=createSuffixOpNode(INC_OP,$1)
+	}
 	| postfix_expression DEC_OP
+	{
+		$$=createSuffixOpNode(INC_OP,$1)
+	}
 	;
 
 primary_expression
@@ -277,20 +410,56 @@ expression
 assignment_expression
 	: conditional_expression
 	| unary_expression assignment_operator assignment_expression
+	{
+		$$ = createAssignNode($1,$2,$3)
+	}
 	;
 
 assignment_operator
 	: '='
+	{
+		$$ = "="
+	}
 	| MUL_ASSIGN
+	{
+		$$ = "*="
+	}
 	| DIV_ASSIGN
+	{
+		$$ = "/="
+	}
 	| MOD_ASSIGN
+	{
+		$$ = "%="
+	}
 	| ADD_ASSIGN
+	{
+		$$ = "+="
+	}
 	| SUB_ASSIGN
+	{
+		$$ = "-="
+	}
 	| LEFT_ASSIGN
+	{
+		$$ = "<<="
+	}
 	| RIGHT_ASSIGN
+	{
+		$$ = ">>="
+	}
 	| AND_ASSIGN
+	{
+		$$ = "&="
+	}
 	| XOR_ASSIGN
+	{
+		$$ = "^="
+	}
 	| OR_ASSIGN
+	{
+		$$ = "|="
+	}
 	;
 
 struct_declaration
@@ -325,7 +494,13 @@ declarator /* 支持多重数组和map */
 
 argument_expression_list
     : assignment_expression
+	{
+		$$=bb()
+	}
     | argument_expression_list ',' assignment_expression
+	{
+		$$=bb()
+	}
     ;
 
 %%

@@ -1,7 +1,6 @@
 package main
 
 //type TokenType int
-type BasicType int
 
 // const (
 // 	NULL                TokenType = iota //空字符
@@ -46,7 +45,7 @@ type BasicType int
 // )
 
 const (
-	INT8_T BasicType = iota
+	INT8_T int = 99999
 	INT16_T
 	INT32_T
 	INT64_T
