@@ -1,10 +1,10 @@
-//line .\fateyacc.y:1
+//line fateyacc.y:1
 package main
 
 import __yyfmt__ "fmt"
 
-//line .\fateyacc.y:3
-//line .\fateyacc.y:5
+//line fateyacc.y:3
+//line fateyacc.y:5
 type yySymType struct {
 	yys                 int
 	exprNode            ExprNode
@@ -12,6 +12,9 @@ type yySymType struct {
 	unary_operator      byte
 	assignment_operator string
 	stmtNode            StmtNode
+	blockItem           BlockItem
+	variable_definition Variable
+	type_specifier      int
 }
 
 const INT_LITERAL = 57346
@@ -165,7 +168,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line .\fateyacc.y:506
+//line fateyacc.y:570
 
 //line yacctab:1
 var yyExca = [...]int{
@@ -176,111 +179,112 @@ var yyExca = [...]int{
 
 const yyPrivate = 57344
 
-const yyLast = 467
+const yyLast = 488
 
 var yyAct = [...]int{
 
-	138, 149, 141, 126, 127, 62, 72, 23, 6, 5,
-	135, 48, 69, 67, 65, 70, 140, 55, 120, 121,
-	16, 18, 66, 50, 128, 60, 41, 103, 182, 112,
-	113, 74, 102, 51, 108, 109, 73, 85, 88, 89,
-	87, 86, 84, 77, 78, 212, 71, 114, 115, 116,
-	101, 219, 182, 201, 68, 211, 59, 99, 199, 96,
-	63, 47, 130, 238, 129, 182, 95, 225, 182, 93,
-	118, 57, 230, 58, 182, 94, 229, 213, 182, 214,
-	75, 202, 182, 97, 181, 91, 182, 54, 53, 117,
-	54, 119, 125, 106, 107, 90, 234, 236, 224, 208,
-	158, 131, 122, 123, 75, 136, 137, 98, 81, 82,
-	207, 124, 132, 83, 159, 161, 163, 170, 171, 177,
-	164, 165, 179, 160, 75, 75, 75, 75, 75, 75,
+	137, 148, 140, 126, 127, 62, 72, 23, 5, 135,
+	70, 48, 67, 65, 47, 139, 69, 55, 68, 50,
+	16, 18, 66, 181, 128, 60, 41, 114, 115, 116,
+	74, 112, 113, 51, 103, 73, 120, 121, 108, 109,
+	211, 102, 101, 181, 99, 71, 210, 218, 200, 198,
+	130, 237, 129, 181, 97, 229, 59, 181, 223, 228,
+	63, 181, 224, 181, 207, 212, 95, 213, 206, 93,
+	201, 181, 194, 180, 94, 181, 91, 96, 54, 58,
+	75, 57, 53, 46, 54, 52, 49, 235, 118, 204,
+	203, 202, 125, 45, 98, 22, 100, 106, 107, 205,
+	157, 131, 122, 123, 75, 136, 17, 117, 179, 119,
+	124, 132, 156, 158, 160, 163, 164, 169, 170, 176,
+	162, 161, 178, 159, 75, 75, 75, 75, 75, 75,
 	75, 75, 75, 75, 75, 75, 75, 75, 75, 75,
-	75, 75, 196, 136, 137, 198, 174, 175, 176, 172,
-	173, 63, 200, 166, 167, 168, 169, 162, 210, 157,
-	185, 186, 187, 188, 189, 190, 191, 192, 193, 194,
-	195, 75, 52, 49, 20, 205, 204, 203, 45, 22,
-	12, 46, 8, 9, 7, 13, 215, 216, 42, 104,
-	105, 206, 100, 110, 111, 17, 180, 44, 21, 15,
-	218, 2, 220, 14, 217, 221, 222, 92, 223, 43,
-	134, 11, 10, 4, 3, 1, 226, 144, 227, 143,
-	228, 142, 139, 183, 184, 178, 231, 19, 79, 76,
-	232, 233, 64, 235, 56, 237, 75, 239, 80, 240,
-	85, 88, 89, 87, 86, 145, 77, 78, 26, 27,
-	28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
-	38, 39, 40, 0, 61, 0, 0, 0, 0, 0,
-	0, 0, 0, 85, 88, 89, 87, 86, 145, 77,
-	78, 0, 12, 0, 8, 9, 0, 13, 146, 147,
-	150, 25, 151, 152, 153, 154, 155, 156, 90, 24,
-	148, 0, 96, 197, 0, 0, 0, 0, 0, 0,
-	0, 81, 82, 0, 0, 12, 83, 8, 9, 0,
-	13, 146, 147, 150, 0, 151, 152, 153, 154, 155,
-	156, 90, 0, 148, 0, 96, 133, 0, 0, 0,
-	0, 0, 0, 0, 81, 82, 0, 0, 0, 83,
-	85, 88, 89, 87, 86, 145, 77, 78, 85, 88,
-	89, 87, 86, 84, 77, 78, 0, 85, 88, 89,
-	87, 86, 84, 77, 78, 85, 88, 89, 87, 86,
-	84, 77, 78, 26, 27, 28, 29, 30, 31, 32,
-	33, 34, 35, 36, 37, 38, 39, 40, 146, 147,
-	150, 0, 151, 152, 153, 154, 155, 156, 90, 0,
-	148, 0, 96, 0, 0, 0, 90, 0, 148, 96,
-	0, 81, 82, 0, 0, 90, 83, 209, 0, 81,
-	82, 0, 0, 90, 83, 0, 0, 0, 81, 82,
-	0, 0, 0, 83, 0, 0, 81, 82, 0, 0,
-	0, 83, 26, 27, 28, 29, 30, 31, 32, 33,
-	34, 35, 36, 37, 38, 39, 40,
+	75, 75, 195, 136, 197, 173, 174, 175, 171, 172,
+	63, 199, 165, 166, 167, 168, 20, 209, 184, 185,
+	186, 187, 188, 189, 190, 191, 192, 193, 43, 12,
+	75, 8, 9, 7, 13, 42, 104, 105, 110, 111,
+	44, 21, 15, 92, 134, 214, 215, 2, 11, 14,
+	10, 6, 4, 3, 1, 143, 142, 141, 138, 217,
+	182, 219, 177, 216, 220, 221, 79, 222, 76, 19,
+	64, 80, 0, 0, 0, 225, 0, 226, 0, 227,
+	0, 56, 183, 61, 0, 230, 0, 0, 0, 231,
+	232, 0, 234, 0, 236, 75, 238, 0, 239, 85,
+	88, 89, 87, 86, 144, 77, 78, 26, 27, 28,
+	29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+	39, 40, 0, 0, 85, 88, 89, 87, 86, 144,
+	77, 78, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 8, 9, 0, 0, 145, 146, 149,
+	25, 150, 151, 152, 153, 154, 155, 90, 24, 147,
+	0, 96, 196, 0, 0, 0, 0, 0, 8, 9,
+	81, 82, 145, 146, 149, 83, 150, 151, 152, 153,
+	154, 155, 90, 0, 147, 0, 96, 133, 0, 0,
+	0, 0, 0, 0, 0, 81, 82, 0, 0, 0,
+	83, 85, 88, 89, 87, 86, 144, 77, 78, 85,
+	88, 89, 87, 86, 84, 77, 78, 0, 85, 88,
+	89, 87, 86, 84, 77, 78, 85, 88, 89, 87,
+	86, 84, 77, 78, 85, 88, 89, 87, 86, 84,
+	77, 78, 0, 0, 0, 0, 0, 0, 0, 145,
+	146, 149, 0, 150, 151, 152, 153, 154, 155, 90,
+	0, 147, 0, 96, 0, 0, 0, 90, 233, 0,
+	0, 0, 81, 82, 0, 0, 90, 83, 147, 0,
+	81, 82, 0, 0, 90, 83, 208, 0, 0, 81,
+	82, 0, 90, 0, 83, 0, 0, 81, 82, 0,
+	0, 0, 83, 0, 0, 81, 82, 0, 0, 0,
+	83, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+	35, 36, 37, 38, 39, 40, 26, 27, 28, 29,
+	30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
+	40, 0, 0, 0, 0, 0, 0, 96,
 }
 var yyPact = [...]int{
 
-	134, 134, -1000, -1000, -1000, -1000, -1000, 190, 186, 186,
-	-1000, -1000, 165, 189, -1000, 117, 218, -1000, 218, 188,
-	116, 136, 186, 109, -59, 422, -1000, -1000, -1000, -1000,
+	123, 123, -1000, -1000, -1000, -1000, -1000, 173, 97, 97,
+	-1000, -1000, 147, 172, -1000, 33, 217, -1000, 217, 171,
+	31, 38, 97, 22, -63, 436, -1000, -1000, -1000, -1000,
 	-1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
-	-1000, 108, 25, -1000, -67, 188, 5, 10, 218, -1000,
-	-1000, -49, -1000, -1000, 188, 371, 22, 186, 353, 18,
-	-1000, -1000, -1000, -1000, 38, 174, -20, -39, -45, 173,
-	20, 181, -46, -30, -1000, -1000, 8, 371, 371, 371,
+	-1000, 21, 19, -1000, -67, 171, 15, 16, 217, -1000,
+	-1000, -49, -1000, -1000, 171, 370, 13, 97, 421, -11,
+	-1000, -1000, -1000, -1000, 25, 78, -28, -30, -38, 160,
+	24, 166, -44, -50, -1000, -1000, 26, 370, 370, 370,
 	-1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
-	371, -1000, -3, 218, -1000, -7, 269, 186, 371, 371,
-	371, 371, 371, 371, 371, 371, 371, 371, 371, 371,
-	371, 371, 371, 371, 371, 371, 371, 371, 371, 187,
-	-1000, -1000, -1000, -1000, -1000, 21, -1000, -1000, 140, 106,
-	186, -1000, -1000, -1000, 236, -1000, -1000, -1000, -1000, -1000,
-	-1000, -1000, -1000, -1000, -1000, -10, 371, -15, -1000, 17,
-	115, 114, 113, 182, 46, 35, 363, -1000, -13, 174,
-	-20, -39, -45, 173, 20, 20, 181, 181, 181, 181,
-	-46, -46, -30, -30, -1000, -1000, -1000, -37, 14, -1000,
-	-1000, -1000, 371, 371, -1000, -1000, -1000, -1000, -1000, -1000,
-	-1000, -1000, -1000, -1000, -1000, -1000, 218, -1000, -1000, 346,
-	-17, 346, -1000, 371, 371, 354, 34, -1000, -1000, -1000,
-	3, 371, -1000, -1000, 371, -1000, -1000, -1000, -1000, 346,
-	-1000, 13, 9, 354, -1000, -1000, -1000, -1000, -1000, 346,
-	346, 33, 42, -1000, 346, 0, 346, -1000, 346, -1000,
-	-1000,
+	370, -1000, -15, 217, -1000, 11, 260, 97, 370, 370,
+	370, 370, 370, 370, 370, 370, 370, 370, 370, 370,
+	370, 370, 370, 370, 370, 370, 370, 370, 370, 99,
+	-1000, -1000, -1000, -1000, -1000, 10, -1000, -1000, 138, 8,
+	97, -1000, -1000, -1000, 235, -1000, -1000, -1000, -1000, -1000,
+	-1000, -1000, -1000, -1000, -19, 370, -20, -1000, 6, 29,
+	28, 27, 90, 4, 0, 362, -1000, -22, 78, -28,
+	-30, -38, 160, 24, 24, 166, 166, 166, 166, -44,
+	-44, -50, -50, -1000, -1000, -1000, -42, 2, -1000, -1000,
+	-1000, 370, 370, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
+	-1000, -1000, -1000, -1000, -1000, 217, -1000, -1000, 337, -21,
+	337, -1000, 370, 370, 354, -6, -1000, -1000, -1000, -2,
+	370, -1000, -1000, 370, -1000, -1000, -1000, -1000, 337, -1000,
+	-4, -8, 354, -1000, -1000, -1000, -1000, -1000, 337, 337,
+	345, 32, -1000, 337, -12, 337, -1000, 337, -1000, -1000,
 }
 var yyPgo = [...]int{
 
-	0, 238, 1, 3, 5, 4, 232, 14, 22, 13,
-	54, 12, 15, 46, 6, 31, 36, 24, 229, 228,
-	225, 223, 0, 222, 16, 2, 221, 219, 217, 215,
-	7, 201, 214, 213, 9, 8, 212, 211, 211, 61,
-	11, 210, 10, 207, 188, 209,
+	0, 211, 1, 3, 5, 4, 210, 13, 22, 12,
+	18, 16, 10, 45, 6, 30, 35, 24, 208, 11,
+	206, 202, 200, 0, 198, 15, 2, 197, 196, 195,
+	9, 7, 8, 194, 187, 193, 192, 191, 190, 188,
+	188, 14, 184, 183, 175, 168,
 }
 var yyR1 = [...]int{
 
-	0, 30, 30, 30, 30, 30, 30, 30, 30, 30,
-	30, 30, 30, 30, 30, 30, 29, 29, 31, 31,
-	31, 32, 35, 35, 38, 38, 33, 33, 34, 34,
-	39, 39, 39, 22, 22, 22, 22, 22, 22, 24,
-	24, 41, 41, 42, 42, 42, 23, 23, 23, 25,
-	25, 26, 26, 26, 27, 27, 28, 28, 28, 28,
-	28, 4, 5, 5, 6, 6, 7, 7, 8, 8,
-	9, 9, 10, 10, 11, 11, 11, 12, 12, 12,
-	12, 12, 13, 13, 13, 14, 14, 14, 16, 16,
-	16, 16, 15, 19, 19, 19, 17, 17, 17, 17,
-	18, 18, 18, 18, 18, 18, 1, 1, 1, 1,
-	1, 1, 1, 2, 2, 3, 3, 21, 21, 21,
-	21, 21, 21, 21, 21, 21, 21, 21, 37, 43,
-	43, 36, 36, 44, 44, 45, 45, 40, 40, 40,
-	20, 20,
+	0, 31, 31, 31, 31, 31, 31, 31, 31, 31,
+	31, 31, 31, 31, 31, 31, 33, 33, 34, 34,
+	34, 35, 37, 37, 40, 40, 36, 36, 32, 32,
+	41, 41, 41, 23, 23, 23, 23, 23, 23, 25,
+	25, 42, 42, 30, 30, 24, 24, 24, 26, 26,
+	27, 27, 27, 28, 28, 29, 29, 29, 29, 29,
+	4, 5, 5, 6, 6, 7, 7, 8, 8, 9,
+	9, 10, 10, 11, 11, 11, 12, 12, 12, 12,
+	12, 13, 13, 13, 14, 14, 14, 16, 16, 16,
+	16, 15, 20, 20, 20, 17, 17, 17, 17, 18,
+	18, 18, 18, 18, 18, 1, 1, 1, 1, 1,
+	1, 1, 2, 2, 3, 3, 22, 22, 22, 22,
+	22, 22, 22, 22, 22, 22, 22, 39, 43, 43,
+	38, 38, 44, 44, 45, 45, 19, 19, 19, 21,
+	21,
 }
 var yyR2 = [...]int{
 
@@ -288,73 +292,71 @@ var yyR2 = [...]int{
 	1, 1, 1, 1, 1, 1, 1, 2, 1, 1,
 	1, 1, 1, 1, 7, 8, 6, 7, 4, 4,
 	0, 2, 4, 1, 1, 1, 1, 1, 1, 2,
-	3, 1, 2, 1, 1, 1, 3, 4, 3, 1,
-	2, 5, 7, 5, 6, 7, 3, 2, 2, 2,
-	3, 1, 1, 5, 1, 3, 1, 3, 1, 3,
-	1, 3, 1, 3, 1, 3, 3, 1, 3, 3,
-	3, 3, 1, 3, 3, 1, 3, 3, 1, 3,
-	3, 3, 1, 1, 1, 1, 1, 2, 2, 2,
-	1, 4, 4, 3, 2, 2, 1, 1, 1, 1,
-	1, 1, 3, 1, 3, 1, 3, 1, 1, 1,
-	1, 1, 1, 1, 1, 1, 1, 1, 7, 2,
-	4, 4, 5, 1, 3, 1, 3, 1, 3, 4,
-	1, 3,
+	3, 1, 2, 1, 1, 3, 4, 3, 1, 2,
+	5, 7, 5, 6, 7, 3, 2, 2, 2, 3,
+	1, 1, 5, 1, 3, 1, 3, 1, 3, 1,
+	3, 1, 3, 1, 3, 3, 1, 3, 3, 3,
+	3, 1, 3, 3, 1, 3, 3, 1, 3, 3,
+	3, 1, 1, 1, 1, 1, 2, 2, 2, 1,
+	4, 4, 3, 2, 2, 1, 1, 1, 1, 1,
+	1, 3, 1, 3, 1, 3, 1, 1, 1, 1,
+	1, 1, 1, 1, 1, 1, 1, 7, 2, 4,
+	4, 5, 1, 3, 1, 3, 1, 3, 4, 1,
+	3,
 }
 var yyChk = [...]int{
 
-	-1000, -29, -31, -32, -33, -34, -35, 50, 48, 49,
-	-36, -37, 46, 51, -31, 9, -40, 9, -40, 62,
-	9, 9, 62, -30, 81, 73, 30, 31, 32, 33,
+	-1000, -33, -34, -35, -36, -32, -37, 50, 48, 49,
+	-38, -39, 46, 51, -34, 9, -19, 9, -19, 62,
+	9, 9, 62, -31, 81, 73, 30, 31, 32, 33,
 	34, 35, 36, 37, 38, 39, 40, 41, 42, 43,
-	44, -30, -44, -45, 9, 62, 45, -39, -40, 64,
-	82, -30, 64, 63, 65, 84, -44, 66, 63, -30,
+	44, -31, -44, -45, 9, 62, 45, -41, -19, 64,
+	82, -31, 64, 63, 65, 84, -44, 66, 63, -31,
 	74, -45, -4, -5, -6, -7, -8, -9, -10, -11,
-	-12, -13, -14, -16, -15, -17, -18, 10, 11, -19,
+	-12, -13, -14, -16, -15, -17, -18, 10, 11, -20,
 	-1, 75, 76, 80, 9, 4, 8, 7, 5, 6,
-	62, 63, -43, -40, -24, -30, 66, 65, 69, 19,
+	62, 63, -43, -19, -25, -31, 66, 65, 69, 19,
 	18, 70, 71, 72, 16, 17, 73, 74, 14, 15,
 	12, 13, 75, 76, 77, 78, 79, 81, 62, 83,
 	10, 11, -17, -17, -15, -2, -3, -5, -17, 67,
-	65, -30, -24, 67, -41, -42, -35, -34, -22, -23,
-	-24, -25, -26, -27, -28, 9, 52, 53, 64, -2,
-	54, 56, 57, 58, 59, 60, 61, -39, -2, -7,
-	-8, -9, -10, -11, -12, -12, -13, -13, -13, -13,
-	-14, -14, -16, -16, -15, -15, -15, -2, -20, -3,
-	9, 63, 65, -21, 84, 20, 21, 22, 23, 24,
-	25, 26, 27, 28, 29, 64, -40, 67, -42, 68,
-	-4, 68, 64, 62, 62, 62, 9, 64, 64, 64,
-	-2, 68, 82, 63, 65, -3, -3, -30, -22, 68,
-	-22, -2, -2, -25, 64, 64, -5, -3, -22, 63,
-	63, -25, -22, -22, 63, -2, 55, -22, 63, -22,
-	-22,
+	65, -31, -25, 67, -42, -30, -32, -23, -24, -25,
+	-26, -27, -28, -29, 9, 52, 53, 64, -2, 54,
+	56, 57, 58, 59, 60, 61, -41, -2, -7, -8,
+	-9, -10, -11, -12, -12, -13, -13, -13, -13, -14,
+	-14, -16, -16, -15, -15, -15, -2, -21, -3, 9,
+	63, 65, -22, 84, 20, 21, 22, 23, 24, 25,
+	26, 27, 28, 29, 64, -19, 67, -30, 68, -4,
+	68, 64, 62, 62, 62, 9, 64, 64, 64, -2,
+	68, 82, 63, 65, -3, -3, -31, -23, 68, -23,
+	-2, -2, -26, 64, 64, -5, -3, -23, 63, 63,
+	-26, -23, -23, 63, -2, 55, -23, 63, -23, -23,
 }
 var yyDef = [...]int{
 
 	0, -2, 16, 18, 19, 20, 21, 0, 0, 0,
-	22, 23, 0, 0, 17, 0, 0, 137, 0, 0,
+	22, 23, 0, 0, 17, 0, 0, 136, 0, 0,
 	0, 0, 30, 0, 0, 0, 1, 2, 3, 4,
 	5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
-	15, 0, 0, 133, 135, 0, 0, 0, 0, 28,
-	138, 0, 29, 131, 0, 0, 0, 0, 0, 31,
-	139, 134, 136, 61, 62, 64, 66, 68, 70, 72,
-	74, 77, 82, 85, 88, 92, 96, 0, 0, 0,
-	100, 93, 94, 95, 106, 107, 108, 109, 110, 111,
-	0, 132, 0, 0, 26, 0, 0, 30, 0, 0,
+	15, 0, 0, 132, 134, 0, 0, 0, 0, 28,
+	137, 0, 29, 130, 0, 0, 0, 0, 0, 31,
+	138, 133, 135, 60, 61, 63, 65, 67, 69, 71,
+	73, 76, 81, 84, 87, 91, 95, 0, 0, 0,
+	99, 92, 93, 94, 105, 106, 107, 108, 109, 110,
+	0, 131, 0, 0, 26, 0, 0, 30, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	104, 105, 97, 98, 99, 0, 113, 115, 92, 0,
-	0, 129, 27, 39, 0, 41, 43, 44, 45, 33,
-	34, 35, 36, 37, 38, 106, 0, 0, 49, 0,
-	0, 0, 0, 0, 0, 0, 0, 32, 0, 65,
-	67, 69, 71, 73, 75, 76, 78, 79, 80, 81,
-	83, 84, 86, 87, 89, 90, 91, 0, 0, 140,
-	103, 112, 0, 0, 117, 118, 119, 120, 121, 122,
-	123, 124, 125, 126, 127, 128, 0, 40, 42, 0,
-	0, 0, 50, 0, 0, 0, 0, 57, 58, 59,
-	0, 0, 101, 102, 0, 114, 116, 130, 46, 0,
-	48, 0, 0, 0, 56, 60, 63, 141, 47, 0,
-	0, 0, 51, 53, 0, 0, 0, 54, 0, 52,
-	55,
+	103, 104, 96, 97, 98, 0, 112, 114, 91, 0,
+	0, 128, 27, 39, 0, 41, 43, 44, 33, 34,
+	35, 36, 37, 38, 105, 0, 0, 48, 0, 0,
+	0, 0, 0, 0, 0, 0, 32, 0, 64, 66,
+	68, 70, 72, 74, 75, 77, 78, 79, 80, 82,
+	83, 85, 86, 88, 89, 90, 0, 0, 139, 102,
+	111, 0, 0, 116, 117, 118, 119, 120, 121, 122,
+	123, 124, 125, 126, 127, 0, 40, 42, 0, 0,
+	0, 49, 0, 0, 0, 0, 56, 57, 58, 0,
+	0, 100, 101, 0, 113, 115, 129, 45, 0, 47,
+	0, 0, 0, 55, 59, 62, 140, 46, 0, 0,
+	0, 50, 52, 0, 0, 0, 53, 0, 51, 54,
 }
 var yyTok1 = [...]int{
 
@@ -722,375 +724,489 @@ yydefault:
 	// dummy call; replaced with literal code
 	switch yynt {
 
+	case 1:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		//line fateyacc.y:53
+		{
+			yyVAL.type_specifier = INT8
+		}
+	case 2:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		//line fateyacc.y:57
+		{
+			yyVAL.type_specifier = INT16
+		}
+	case 3:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		//line fateyacc.y:61
+		{
+			yyVAL.type_specifier = INT32
+		}
+	case 4:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		//line fateyacc.y:65
+		{
+			yyVAL.type_specifier = INT64
+		}
+	case 5:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		//line fateyacc.y:69
+		{
+			yyVAL.type_specifier = UINT8
+		}
+	case 6:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		//line fateyacc.y:73
+		{
+			yyVAL.type_specifier = UINT16
+		}
+	case 7:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		//line fateyacc.y:77
+		{
+			yyVAL.type_specifier = UINT32
+		}
+	case 8:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		//line fateyacc.y:81
+		{
+			yyVAL.type_specifier = UINT64
+		}
+	case 9:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		//line fateyacc.y:85
+		{
+			yyVAL.type_specifier = FLOAT32
+		}
+	case 10:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		//line fateyacc.y:89
+		{
+			yyVAL.type_specifier = FLOAT64
+		}
+	case 11:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		//line fateyacc.y:93
+		{
+			yyVAL.type_specifier = BOOL
+		}
+	case 12:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		//line fateyacc.y:97
+		{
+			yyVAL.type_specifier = CHAR
+		}
+	case 13:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		//line fateyacc.y:101
+		{
+			yyVAL.type_specifier = STRING
+		}
+	case 14:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		//line fateyacc.y:105
+		{
+			yyVAL.type_specifier = TYPE_CONST
+		}
+	case 15:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		//line fateyacc.y:109
+		{
+			yyVAL.type_specifier = TYPE_STRUCT
+		}
+	case 28:
+		yyDollar = yyS[yypt-4 : yypt+1]
+		//line fateyacc.y:146
+		{
+			yyVAL.variable_definition = createDefinedVariable(LET, yyDollar[2].exprNode, yyDollar[3].type_specifier)
+		}
+	case 29:
+		yyDollar = yyS[yypt-4 : yypt+1]
+		//line fateyacc.y:150
+		{
+			yyVAL.variable_definition = createDefinedVariable(SET, yyDollar[2].exprNode, yyDollar[3].type_specifier)
+		}
 	case 39:
 		yyDollar = yyS[yypt-2 : yypt+1]
-		//line .\fateyacc.y:114
+		//line fateyacc.y:172
 		{
 			yyVAL.stmtNode = aa()
 		}
 	case 40:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:118
+		//line fateyacc.y:176
+		{
+			yyVAL.stmtNode = aa()
+		}
+	case 43:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		//line fateyacc.y:188
+		{
+			yyVAL.blockItem = createBlockItemFormVar(yyDollar[1].variable_definition)
+		}
+	case 44:
+		yyDollar = yyS[yypt-1 : yypt+1]
+		//line fateyacc.y:192
+		{
+			yyVAL.blockItem = createBlockItemFormStmt(yyDollar[1].stmtNode)
+		}
+	case 45:
+		yyDollar = yyS[yypt-3 : yypt+1]
+		//line fateyacc.y:200
 		{
 			yyVAL.stmtNode = aa()
 		}
 	case 46:
-		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:136
+		yyDollar = yyS[yypt-4 : yypt+1]
+		//line fateyacc.y:204
 		{
 			yyVAL.stmtNode = aa()
 		}
 	case 47:
-		yyDollar = yyS[yypt-4 : yypt+1]
-		//line .\fateyacc.y:140
+		yyDollar = yyS[yypt-3 : yypt+1]
+		//line fateyacc.y:208
 		{
 			yyVAL.stmtNode = aa()
 		}
 	case 48:
-		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:144
-		{
-			yyVAL.stmtNode = aa()
-		}
-	case 49:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line .\fateyacc.y:151
+		//line fateyacc.y:215
 		{
 			yyVAL.stmtNode = StmtNode{}
 		}
-	case 50:
+	case 49:
 		yyDollar = yyS[yypt-2 : yypt+1]
-		//line .\fateyacc.y:155
+		//line fateyacc.y:219
 		{
 			yyVAL.stmtNode = createExprStmtNode(yyDollar[1].exprNode)
 		}
-	case 51:
+	case 50:
 		yyDollar = yyS[yypt-5 : yypt+1]
-		//line .\fateyacc.y:162
+		//line fateyacc.y:226
 		{
 			yyVAL.stmtNode = createIfNode(yyDollar[3].exprNode, yyDollar[5].stmtNode, (StmtNode{}))
 		}
-	case 52:
+	case 51:
 		yyDollar = yyS[yypt-7 : yypt+1]
-		//line .\fateyacc.y:166
+		//line fateyacc.y:230
 		{
 			yyVAL.stmtNode = createIfNode(yyDollar[3].exprNode, yyDollar[5].stmtNode, yyDollar[7].stmtNode)
 		}
-	case 53:
+	case 52:
 		yyDollar = yyS[yypt-5 : yypt+1]
-		//line .\fateyacc.y:170
+		//line fateyacc.y:234
 		{
 			yyVAL.stmtNode = aa()
 		}
-	case 54:
+	case 53:
 		yyDollar = yyS[yypt-6 : yypt+1]
-		//line .\fateyacc.y:177
+		//line fateyacc.y:241
 		{
 			yyVAL.stmtNode = createForNode(yyDollar[3].stmtNode, yyDollar[4].stmtNode, (ExprNode{}), yyDollar[6].stmtNode)
 		}
-	case 55:
+	case 54:
 		yyDollar = yyS[yypt-7 : yypt+1]
-		//line .\fateyacc.y:181
+		//line fateyacc.y:245
 		{
 			yyVAL.stmtNode = createForNode(yyDollar[3].stmtNode, yyDollar[4].stmtNode, yyDollar[5].exprNode, yyDollar[7].stmtNode)
 		}
-	case 56:
+	case 55:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:188
+		//line fateyacc.y:252
+		{
+			yyVAL.stmtNode = aa()
+		}
+	case 56:
+		yyDollar = yyS[yypt-2 : yypt+1]
+		//line fateyacc.y:256
 		{
 			yyVAL.stmtNode = aa()
 		}
 	case 57:
 		yyDollar = yyS[yypt-2 : yypt+1]
-		//line .\fateyacc.y:192
+		//line fateyacc.y:260
 		{
 			yyVAL.stmtNode = aa()
 		}
 	case 58:
 		yyDollar = yyS[yypt-2 : yypt+1]
-		//line .\fateyacc.y:196
+		//line fateyacc.y:264
 		{
 			yyVAL.stmtNode = aa()
 		}
 	case 59:
-		yyDollar = yyS[yypt-2 : yypt+1]
-		//line .\fateyacc.y:200
-		{
-			yyVAL.stmtNode = aa()
-		}
-	case 60:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:204
+		//line fateyacc.y:268
 		{
 			yyVAL.stmtNode = aa()
 		}
-	case 63:
+	case 62:
 		yyDollar = yyS[yypt-5 : yypt+1]
-		//line .\fateyacc.y:216
+		//line fateyacc.y:280
 		{
 			yyVAL.exprNode = createCondExprNode(yyDollar[1].exprNode, yyDollar[3].exprNode, yyDollar[5].exprNode)
 		}
-	case 65:
+	case 64:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:224
+		//line fateyacc.y:288
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, "||", yyDollar[3].exprNode)
 		}
-	case 67:
+	case 66:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:232
+		//line fateyacc.y:296
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, "&&", yyDollar[3].exprNode)
 		}
-	case 69:
+	case 68:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:240
+		//line fateyacc.y:304
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, "|", yyDollar[3].exprNode)
 		}
-	case 71:
+	case 70:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:248
+		//line fateyacc.y:312
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, "^", yyDollar[3].exprNode)
 		}
-	case 73:
+	case 72:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:256
+		//line fateyacc.y:320
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, "&", yyDollar[3].exprNode)
 		}
-	case 75:
+	case 74:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:264
+		//line fateyacc.y:328
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, "==", yyDollar[3].exprNode)
 		}
-	case 76:
+	case 75:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:268
+		//line fateyacc.y:332
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, "!=", yyDollar[3].exprNode)
 		}
-	case 78:
+	case 77:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:276
+		//line fateyacc.y:340
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, "<", yyDollar[3].exprNode)
 		}
-	case 79:
+	case 78:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:280
+		//line fateyacc.y:344
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, ">", yyDollar[3].exprNode)
 		}
-	case 80:
+	case 79:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:284
+		//line fateyacc.y:348
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, "<=", yyDollar[3].exprNode)
 		}
-	case 81:
+	case 80:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:288
+		//line fateyacc.y:352
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, ">=", yyDollar[3].exprNode)
 		}
-	case 83:
+	case 82:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:296
+		//line fateyacc.y:360
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, "<<", yyDollar[3].exprNode)
 		}
-	case 84:
+	case 83:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:300
+		//line fateyacc.y:364
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, ">>", yyDollar[3].exprNode)
 		}
-	case 86:
+	case 85:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:308
+		//line fateyacc.y:372
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, "+", yyDollar[3].exprNode)
 		}
-	case 87:
+	case 86:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:312
+		//line fateyacc.y:376
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, "-", yyDollar[3].exprNode)
 		}
-	case 89:
+	case 88:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:320
+		//line fateyacc.y:384
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, "*", yyDollar[3].exprNode)
 		}
-	case 90:
+	case 89:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:324
+		//line fateyacc.y:388
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, "/", yyDollar[3].exprNode)
 		}
-	case 91:
+	case 90:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:328
+		//line fateyacc.y:392
 		{
 			yyVAL.exprNode = ceateBinaryOpNode(yyDollar[1].exprNode, "%", yyDollar[3].exprNode)
 		}
-	case 93:
+	case 92:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line .\fateyacc.y:339
+		//line fateyacc.y:403
 		{
 			yyVAL.unary_operator = '+'
 		}
-	case 94:
+	case 93:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line .\fateyacc.y:343
+		//line fateyacc.y:407
 		{
 			yyVAL.unary_operator = '-'
 		}
-	case 95:
+	case 94:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line .\fateyacc.y:347
+		//line fateyacc.y:411
 		{
 			yyVAL.unary_operator = '!'
 		}
-	case 97:
+	case 96:
 		yyDollar = yyS[yypt-2 : yypt+1]
-		//line .\fateyacc.y:355
+		//line fateyacc.y:419
 		{
 			yyVAL.exprNode = createPrefixOpNode(INC_OP, yyDollar[2].exprNode)
 		}
-	case 98:
+	case 97:
 		yyDollar = yyS[yypt-2 : yypt+1]
-		//line .\fateyacc.y:359
+		//line fateyacc.y:423
 		{
 			yyVAL.exprNode = createPrefixOpNode(DEC_OP, yyDollar[2].exprNode)
 		}
-	case 99:
+	case 98:
 		yyDollar = yyS[yypt-2 : yypt+1]
-		//line .\fateyacc.y:363
+		//line fateyacc.y:427
 		{
 			yyVAL.exprNode = createUnaryOpNode(yyDollar[1].unary_operator, yyDollar[2].exprNode)
 		}
-	case 101:
+	case 100:
 		yyDollar = yyS[yypt-4 : yypt+1]
-		//line .\fateyacc.y:371
+		//line fateyacc.y:435
 		{
 			yyVAL.exprNode = createArefNode(yyDollar[1].exprNode, yyDollar[3].exprNode)
 		}
-	case 102:
+	case 101:
 		yyDollar = yyS[yypt-4 : yypt+1]
-		//line .\fateyacc.y:375
+		//line fateyacc.y:439
 		{
 			yyVAL.exprNode = createFuncallNode(yyDollar[1].exprNode, yyDollar[3].exprNode_list)
 		}
-	case 103:
+	case 102:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:379
+		//line fateyacc.y:443
 		{
 			yyVAL.exprNode = createMemberNode(yyDollar[1].exprNode, yyDollar[3].exprNode)
 		}
+	case 103:
+		yyDollar = yyS[yypt-2 : yypt+1]
+		//line fateyacc.y:447
+		{
+			yyVAL.exprNode = createSuffixOpNode(INC_OP, yyDollar[1].exprNode)
+		}
 	case 104:
 		yyDollar = yyS[yypt-2 : yypt+1]
-		//line .\fateyacc.y:383
+		//line fateyacc.y:451
 		{
 			yyVAL.exprNode = createSuffixOpNode(INC_OP, yyDollar[1].exprNode)
 		}
-	case 105:
-		yyDollar = yyS[yypt-2 : yypt+1]
-		//line .\fateyacc.y:387
-		{
-			yyVAL.exprNode = createSuffixOpNode(INC_OP, yyDollar[1].exprNode)
-		}
-	case 112:
+	case 111:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:400
+		//line fateyacc.y:464
 		{
 			yyVAL.exprNode = yyDollar[2].exprNode
 		}
-	case 116:
+	case 115:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:413
+		//line fateyacc.y:477
 		{
 			yyVAL.exprNode = createAssignNode(yyDollar[1].exprNode, yyDollar[2].assignment_operator, yyDollar[3].exprNode)
 		}
-	case 117:
+	case 116:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line .\fateyacc.y:420
+		//line fateyacc.y:484
 		{
 			yyVAL.assignment_operator = "="
 		}
-	case 118:
+	case 117:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line .\fateyacc.y:424
+		//line fateyacc.y:488
 		{
 			yyVAL.assignment_operator = "*="
 		}
-	case 119:
+	case 118:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line .\fateyacc.y:428
+		//line fateyacc.y:492
 		{
 			yyVAL.assignment_operator = "/="
 		}
-	case 120:
+	case 119:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line .\fateyacc.y:432
+		//line fateyacc.y:496
 		{
 			yyVAL.assignment_operator = "%="
 		}
-	case 121:
+	case 120:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line .\fateyacc.y:436
+		//line fateyacc.y:500
 		{
 			yyVAL.assignment_operator = "+="
 		}
-	case 122:
+	case 121:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line .\fateyacc.y:440
+		//line fateyacc.y:504
 		{
 			yyVAL.assignment_operator = "-="
 		}
-	case 123:
+	case 122:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line .\fateyacc.y:444
+		//line fateyacc.y:508
 		{
 			yyVAL.assignment_operator = "<<="
 		}
-	case 124:
+	case 123:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line .\fateyacc.y:448
+		//line fateyacc.y:512
 		{
 			yyVAL.assignment_operator = ">>="
 		}
-	case 125:
+	case 124:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line .\fateyacc.y:452
+		//line fateyacc.y:516
 		{
 			yyVAL.assignment_operator = "&="
 		}
-	case 126:
+	case 125:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line .\fateyacc.y:456
+		//line fateyacc.y:520
 		{
 			yyVAL.assignment_operator = "^="
 		}
-	case 127:
+	case 126:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line .\fateyacc.y:460
+		//line fateyacc.y:524
 		{
 			yyVAL.assignment_operator = "|="
 		}
-	case 140:
+	case 139:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line .\fateyacc.y:497
+		//line fateyacc.y:561
 		{
 			yyVAL.exprNode_list = bb()
 		}
-	case 141:
+	case 140:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line .\fateyacc.y:501
+		//line fateyacc.y:565
 		{
 			yyVAL.exprNode_list = bb()
 		}

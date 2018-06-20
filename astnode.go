@@ -27,6 +27,7 @@ type DefinedVariable struct {
 	initializer ExprNode //表达式节点
 	ir          Expr
 	sequence    int64
+	dectype     int
 	symbol      Symbol //符号表
 }
 
@@ -118,6 +119,12 @@ type BlockNode struct {
 	variables []DefinedVariable
 	stmts     []StmtNode
 	//scope     LocalScope //暂不使用
+}
+
+type BlockItem struct {
+	location  Location
+	variables *DefinedVariable
+	stmts     *StmtNode
 }
 
 type BreakNode struct {
@@ -233,6 +240,7 @@ type Slot struct {
 type TypeNode struct {
 	typeRef int //BasicType
 	types   int //BasicType
+	dectype int
 }
 type TypedefNode struct {
 	real           TypeNode

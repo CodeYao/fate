@@ -8,6 +8,9 @@ package main
 	unary_operator byte
 	assignment_operator string
 	stmtNode StmtNode
+	blockItem BlockItem
+	variable_definition Variable
+	type_specifier int
 }
 
 %token <exprNode>     INT_LITERAL
@@ -33,30 +36,79 @@ package main
 %type <exprNode> primary_expression expression assignment_expression constant_expression conditional_expression 
 	  logical_or_expression logical_and_expression inclusive_or_expression exclusive_or_expression and_expression equality_expression
 	  relational_expression shift_expression additive_expression cast_expression multiplicative_expression unary_expression postfix_expression
+	  declarator
 %type <unary_operator> unary_operator
 %type <exprNode_list> argument_expression_list
 %type <assignment_operator> assignment_operator
 %type <stmtNode> statement labeled_statement compound_statement expression_statement selection_statement iteration_statement jump_statement
+%type <blockItem> block_item
+%type <type_specifier> type_specifier
+%type <variable_definition> variable_definition
 %start translation_unit
 
 %%
 
 type_specifier
     : INT8
+	{
+		$$ = INT8
+	}
 	| INT16
+	{
+		$$ = INT16
+	}
 	| INT32
+	{
+		$$ = INT32
+	}
 	| INT64
+	{
+		$$ = INT64
+	}
 	| UINT8
+	{
+		$$ = UINT8
+	}
 	| UINT16
+	{
+		$$ = UINT16
+	}
 	| UINT32
+	{
+		$$ = UINT32
+	}
 	| UINT64
+	{
+		$$ = UINT64
+	}
     | FLOAT32
+	{
+		$$ = FLOAT32
+	}
     | FLOAT64
+	{
+		$$ = FLOAT64
+	}
 	| BOOL
+	{
+		$$ = BOOL
+	}
     | CHAR
+	{
+		$$ = CHAR
+	}
     | STRING
+	{
+		$$ = STRING
+	}
     | TYPE_CONST
+	{
+		$$ = TYPE_CONST
+	}
     | TYPE_STRUCT
+	{
+		$$ = TYPE_STRUCT
+	}
     ; /* 声明过的IDENTIFIER返回TYPE_STRUCT或者TYPE_CONST，没有声明过则返回IDENTIFIER */
 
 translation_unit
@@ -91,7 +143,13 @@ function_definition
 
 variable_definition
     : LET declarator type_specifier ';'
+	{
+		$$ = createDefinedVariable(LET,$2,$3)
+	}
     | SET declarator type_specifier ';'
+	{
+		$$ = createDefinedVariable(SET,$2,$3)
+	}
     ;
 
 parameter_list
@@ -122,13 +180,25 @@ compound_statement
 
 block_item_list
 	: block_item
+	{
+		$$ = createBlockNode()
+	}
 	| block_item_list block_item
+	{
+		$$ = createBlockNode()
+	}
 	;
 
 block_item
-	: type_declaration
-    | variable_definition
+	: variable_definition
+	{
+		$$ = createBlockItemFormVar($1)
+	}
 	| statement
+	{
+		$$ = createBlockItemFormStmt($1)
+	}
+	//| type_declaration
 	;
 
 labeled_statement

@@ -184,3 +184,31 @@ func createForNode(init StmtNode, cond StmtNode, incr ExprNode, body StmtNode) S
 	fmt.Println("chenyao*****************for cond is", cond.exprStmtNode.expr.binaryOpNode.operator)
 	return stmtNode
 }
+
+func createBlockItemFormVar(variable Variable) BlockItem {
+	var blockItem BlockItem
+	if blockItem.variables == nil {
+		blockItem.variables = &DefinedVariable{}
+	}
+	blockItem.variables.variable = variable
+	return blockItem
+}
+
+func createBlockItemFormStmt(stmt StmtNode) BlockItem {
+	var blockItem BlockItem
+	if blockItem.stmts == nil {
+		blockItem.stmts = &StmtNode{}
+	}
+	blockItem.stmts = &stmt
+	return blockItem
+}
+
+func createDefinedVariable(dectype int, expr ExprNode, type_specifier int) Variable {
+	var variable Variable
+
+	variable.entity.isPrivate = false
+	variable.entity.name = expr.literalNode.identifierLiteralNode.value
+	variable.entity.typeNode.types = type_specifier
+	variable.entity.typeNode.dectype = dectype
+	return variable
+}
